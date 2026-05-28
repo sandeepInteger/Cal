@@ -87,6 +87,40 @@ function App() {
 
   const continuousPeriods = findContinuousHolidays()
 
+  // Calculate statistics for June-December (months 5-11)
+  const calculateStats = () => {
+    let totalWeekends = 0
+    let totalWFH = 0
+    let totalSL = 0
+    let totalEL = 0
+    let totalNational = 0
+    let totalDays = 0
+
+    // Count from June (5) to December (11)
+    for (let month = 5; month <= 11; month++) {
+      const daysInMonth = new Date(year, month + 1, 0).getDate()
+      for (let day = 1; day <= daysInMonth; day++) {
+        totalDays++
+        const dateStr = formatDate(year, month, day)
+        const weekday = new Date(year, month, day).getDay()
+        const isWeekend = weekday === 0 || weekday === 6
+
+        if (isWeekend) totalWeekends++
+        if (wfhDays.has(dateStr)) totalWFH++
+        if (slDays.has(dateStr)) totalSL++
+        if (elDays.has(dateStr)) totalEL++
+        if (nationalDays.has(dateStr)) totalNational++
+      }
+    }
+
+    const totalLeaves = totalSL + totalEL + totalNational + totalWeekends
+    const workingDays = totalDays - totalLeaves
+
+    return { totalWeekends, totalWFH, totalSL, totalEL, totalNational, totalLeaves, totalDays, workingDays }
+  }
+
+  const stats = calculateStats()
+
   return (
     <main className="calendar-page">
       <header className="calendar-header">
@@ -129,6 +163,37 @@ function App() {
           </div>
         </div>
       </header>
+
+      <div className="statistics-section">
+        <div className="stat-card">
+          <div className="stat-label">Working Days</div>
+          <div className="stat-value">{stats.workingDays}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-label">Weekends</div>
+          <div className="stat-value">{stats.totalWeekends}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-label">WFH</div>
+          <div className="stat-value">{stats.totalWFH}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-label">SL Days</div>
+          <div className="stat-value">{stats.totalSL}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-label">EL Days</div>
+          <div className="stat-value">{stats.totalEL}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-label">National Holidays</div>
+          <div className="stat-value">{stats.totalNational}</div>
+        </div>
+        <div className="stat-card highlight">
+          <div className="stat-label">Total Leaves</div>
+          <div className="stat-value">{stats.totalLeaves}</div>
+        </div>
+      </div>
 
       <div className="year-grid">
         {monthNames.slice(5).map((month, slicedIndex) => {
