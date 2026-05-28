@@ -131,7 +131,8 @@ function App() {
       </header>
 
       <div className="year-grid">
-        {monthNames.map((month, monthIndex) => {
+        {monthNames.slice(5).map((month, slicedIndex) => {
+          const monthIndex = slicedIndex + 5
           const monthStart = new Date(year, monthIndex, 1).getDay()
           const daysInMonth = new Date(year, monthIndex + 1, 0).getDate()
 
