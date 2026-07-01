@@ -97,7 +97,7 @@ function App() {
     let totalDays = 0
 
     // Count from June (5) to December (11)
-    for (let month = 6; month <= 11; month++) {
+    for (let month = 7; month <= 11; month++) {
       const daysInMonth = new Date(year, month + 1, 0).getDate()
       for (let day = 1; day <= daysInMonth; day++) {
         totalDays++
